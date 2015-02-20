@@ -172,7 +172,7 @@ def playGame(X):
             state = action
         iterations = iterations + 1
         avgScore = avgScore + score / maxIterations
-    print("Gameplay Iterations: {}\nAverage Score: {}\nPath Taken: {}".format(maxIterations, avgScore, pathTaken))
+    print("Gameplay Iterations: {}\nAverage Score: {:.2f}\nPath Taken: {}".format(maxIterations, avgScore, pathTaken))
 
 
 #runTrials(gam=0.1)
