@@ -129,11 +129,15 @@ def runTrials(maxIt=10000, verbose=False, gam=0.8):
         epsilon = 1.0 - (iterations/maxIterations)
         iterations = iterations + 1
     print("\nLearning Iterations: {}, Gamma: {}".format(iterations, gamma))
+    print("     1:  2:  3:  4:  5:  6:  7:  8:  9:")
     X = Q 
     for x in range(0, len(Q)):
         for y in range(0, len(Q[x])):
             X[x][y] = int(Q[x][y])
+    state_disp = 1
     for x in X:
+        print("{}: ".format(state_disp), end="")
+        state_disp = state_disp + 1
         for y in x:
             print("{:4}".format(y), end = "")
         print()
@@ -157,10 +161,14 @@ def playGame(X):
     while iterations < maxIterations:
         score = 0
         state = 0
+        if iterations == maxIterations - 1:
+            pathTaken = []
         while state != len(actions) - 1:
             action = getMaxAction(state)
             points = getRewardValue(state, action)
             score = score + points
+            if iterations == maxIterations - 1:
+                pathTaken.append(action + 1)
             state = action
         iterations = iterations + 1
         avgScore = avgScore + score / maxIterations
