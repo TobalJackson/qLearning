@@ -3,14 +3,14 @@ from pprint import pprint
 import random
 import os
 
-R = [[0, 20, 10, 0, 30, 0, 0, 0, 0], 
-     [0, 0, 0, 10, 30, 0, 0, 0, 0], 
-     [0, 0, 0, 20, 30, 0, 0, 0, 0], 
-     [0, 0, 0, 0, 30, 0, 0, 0, 0], 
-     [0, 0, 0, 0, 0, 20, 10, 0, 30], 
-     [0, 0, 0, 0, 0, 0, 0, 10, 30], 
-     [0, 0, 0, 0, 0, 0, 0, 20, 30], 
-     [0, 0, 0, 0, 0, 0, 0, 0, 30], 
+R = [[0, 20, 10, 0, 35, 0, 0, 0, 0], 
+     [0, 0, 0, 10, 35, 0, 0, 0, 0], 
+     [0, 0, 0, 20, 35, 0, 0, 0, 0], 
+     [0, 0, 0, 0, 35, 0, 0, 0, 0], 
+     [0, 0, 0, 0, 0, 20, 10, 0, 35], 
+     [0, 0, 0, 0, 0, 0, 0, 10, 35], 
+     [0, 0, 0, 0, 0, 0, 0, 20, 35], 
+     [0, 0, 0, 0, 0, 0, 0, 0, 35], 
      [0, 0, 0, 0, 0, 0, 0, 0, 0]]
 
 Q = [[0, 0, 0, 0, 0, 0, 0, 0, 0], 
@@ -41,7 +41,11 @@ alpha = 0.5
 
 def getActions(state):
     if random.random() < randomDeath:
-        return [len(actions) - 1]
+        if state != 4:
+            return [8]
+        else:
+            return actions.get(state)
+            #return [len(actions) - 1]
     else:
         return actions.get(state)
 
@@ -93,7 +97,7 @@ def getNextAction(state, verbose=False):
     else:
         return getMaxAction(state)
 
-def runTrials(maxIt=20000, verbose=False, eps=1.0, gam=0.8, alph=1.0, ranDeath=0.9):
+def runTrials(maxIt=20000, verbose=False, eps=1.0, gam=0.8, alph=1.0, ranDeath=0.4):
     global epsilon
     global gamma
     global randomDeath
@@ -144,7 +148,10 @@ def runTrials(maxIt=20000, verbose=False, eps=1.0, gam=0.8, alph=1.0, ranDeath=0
     for x in range(0, len(Q)):
         for y in range(0, len(Q[x])):
             X[x][y] = int(Q[x][y])
+    state_disp = 1
     for x in X:
+        print("{}: ".format(state_disp), end="")
+        state_disp = state_disp + 1
         for y in x:
             print("{:4}".format(y), end = "")
         print()
@@ -165,18 +172,21 @@ def playGame(X):
                 Q[5].index(max(Q[5]))+1,
                 Q[6].index(max(Q[6]))+1,
                 Q[7].index(max(Q[7]))+1]
-
     while iterations < maxIterations:
         score = 0
         state = 0
+        if iterations == maxIterations - 1:
+            pathTaken = []
         while state != len(actions) - 1:
             action = getMaxAction(state)
             points = getRewardValue(state, action)
             score = score + points
+            if iterations == maxIterations - 1:
+                pathTaken.append(action + 1)
             state = action
         iterations = iterations + 1
         avgScore = avgScore + score / maxIterations
-    print("Gameplay Iterations: {}\nAverage Score: {}\nPath Taken: {}".format(maxIterations, avgScore, pathTaken))
+    print("Gameplay Iterations: {}\nAverage Score: {:.2f}\nPath Taken: {}".format(maxIterations, avgScore, pathTaken))
 
 
 #runTrials(gam=0.1)
